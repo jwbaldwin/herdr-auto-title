@@ -1,0 +1,25 @@
+id = "herdr-auto-title"
+name = "Herdr Auto Title"
+version = "0.1.0"
+min_herdr_version = "0.7.5"
+description = "Use OpenCode titles until a Herdr tab is manually renamed"
+platforms = ["linux", "macos"]
+
+[[build]]
+command = ["cargo", "build", "--release", "--locked"]
+
+[[events]]
+on = "pane.agent_status_changed"
+command = ["./target/release/herdr-auto-title"]
+
+[[events]]
+on = "tab.created"
+command = ["./target/release/herdr-auto-title"]
+
+[[events]]
+on = "tab.closed"
+command = ["./target/release/herdr-auto-title"]
+
+[[events]]
+on = "workspace.closed"
+command = ["./target/release/herdr-auto-title"]
