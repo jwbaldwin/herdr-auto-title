@@ -32,7 +32,7 @@ herdr plugin log list --plugin herdr-auto-title
 For a GitHub installation after this repository is published:
 
 ```sh
-herdr plugin install jbaldwin/herdr-auto-title
+herdr plugin install jwbaldwin/herdr-auto-title
 ```
 
 ## Remove
