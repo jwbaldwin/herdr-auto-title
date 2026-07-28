@@ -1,9 +1,9 @@
 [package]
 name = "herdr-auto-title"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.85"
-description = "Keep Herdr tabs synced with OpenCode titles until manually renamed"
+description = "Show agent status and keep managed Herdr tabs synced with OpenCode titles"
 license = "MIT"
 
 [dependencies]

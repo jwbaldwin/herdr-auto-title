@@ -1,12 +1,15 @@
 id = "herdr-auto-title"
 name = "Herdr Auto Title"
-version = "0.1.0"
+version = "0.2.0"
 min_herdr_version = "0.7.5"
-description = "Use OpenCode titles until a Herdr tab is manually renamed"
+description = "Show status on managed tabs and use OpenCode titles until manually renamed"
 platforms = ["linux", "macos"]
 
 [[build]]
 command = ["cargo", "build", "--release", "--locked"]
+
+[[startup]]
+command = ["./target/release/herdr-auto-title"]
 
 [[events]]
 on = "pane.agent_status_changed"
@@ -18,6 +21,22 @@ command = ["./target/release/herdr-auto-title"]
 
 [[events]]
 on = "tab.closed"
+command = ["./target/release/herdr-auto-title"]
+
+[[events]]
+on = "tab.focused"
+command = ["./target/release/herdr-auto-title"]
+
+[[events]]
+on = "tab.renamed"
+command = ["./target/release/herdr-auto-title"]
+
+[[events]]
+on = "pane.moved"
+command = ["./target/release/herdr-auto-title"]
+
+[[events]]
+on = "pane.closed"
 command = ["./target/release/herdr-auto-title"]
 
 [[events]]

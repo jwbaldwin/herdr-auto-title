@@ -8,7 +8,7 @@ Keep Herdr tab labels synchronized with OpenCode's generated terminal title unti
 
 - Use only Herdr 0.7.5's supported plugin hooks.
 - Never poll and never run on keyboard input.
-- Ignore agents other than OpenCode.
+- Use titles only from OpenCode; use Herdr's aggregate status for managed multi-pane tabs.
 - Treat numeric labels and `opencode` as automatic defaults. Treat any other initial label as intentional.
 - Persist state under `HERDR_PLUGIN_STATE_DIR` and distinguish named Herdr sessions that reuse tab IDs.
 - Serialize concurrent event processes so an automatic rename cannot be mistaken for a manual rename.
@@ -16,6 +16,7 @@ Keep Herdr tab labels synchronized with OpenCode's generated terminal title unti
 - Persist the 16 most recently used automatic labels before asking Herdr to rename so a recently restored label remains recognized as automatic.
 - Accept that Herdr 0.7.5 has no conditional tab rename: a manual rename issued in the brief gap between the authoritative read and automatic rename can be overwritten.
 - A manual rename to one of the 16 retained automatic labels is indistinguishable from a restored label and remains automatic.
+- Derive status icons from authoritative Herdr state without persisting status or polling.
 
 ## Phase 1: Title Policy (complete)
 
@@ -51,3 +52,9 @@ Add the Herdr manifest, documentation, release profile, and live verification:
 - document installation, behavior, limits, and removal.
 
 Acceptance: formatting, linting, tests, release build, plugin link, and disposable-session checks all pass.
+
+## Phase 4: Agent Status (complete)
+
+Prefix managed tab labels with Herdr's authoritative aggregate agent status while keeping persisted title ownership undecorated. Reconcile status after lifecycle, focus, rename, pane-topology, and startup events without polling.
+
+Acceptance: policy and runtime tests cover all five icons, stale event payloads, manual names, focus transitions, multi-pane tabs, and restart reconciliation.
