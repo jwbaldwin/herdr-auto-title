@@ -15,6 +15,7 @@ pub(crate) enum TabState {
 }
 
 const MAX_TRACKED_LABELS: usize = 16;
+const LEGACY_WORKING_ICON: &str = "⣿";
 
 #[derive(Clone, Copy, Debug, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
@@ -128,6 +129,8 @@ fn finish(
     next: TabState,
     status: AgentStatus,
 ) -> Action {
+    let base_label = strip_legacy_working_icon(&base_label).to_owned();
+    let next = migrate_legacy_working_icon(next);
     let desired = format!("{} {base_label}", status.icon());
 
     if current_label == desired {
@@ -160,9 +163,30 @@ fn is_owned_label(current_label: &str, base_label: &str) -> bool {
 }
 
 fn strip_status(label: &str) -> Option<&str> {
-    ["◐", "◉", "●", "✓", "○"]
+    ["◐", LEGACY_WORKING_ICON, "◉", "●", "✓", "○"]
         .into_iter()
         .find_map(|icon| label.strip_prefix(icon)?.strip_prefix(' '))
+}
+
+fn strip_legacy_working_icon(label: &str) -> &str {
+    label
+        .strip_prefix(LEGACY_WORKING_ICON)
+        .and_then(|label| label.strip_prefix(' '))
+        .unwrap_or(label)
+}
+
+fn migrate_legacy_working_icon(state: TabState) -> TabState {
+    match state {
+        TabState::Tracking { labels } => TabState::Tracking {
+            labels: labels
+                .into_iter()
+                .map(|label| strip_legacy_working_icon(&label).to_owned())
+                .collect(),
+        },
+        TabState::Pinned { label } => TabState::Pinned {
+            label: label.map(|label| strip_legacy_working_icon(&label).to_owned()),
+        },
+    }
 }
 
 fn remember(labels: &mut VecDeque<String>, label: &str) {
@@ -257,6 +281,32 @@ mod tests {
                 AgentStatus::Idle,
             ),
             rename(&["1", "Fix OAuth callback"], "✓ Fix OAuth callback")
+        );
+    }
+
+    #[test]
+    fn legacy_working_icon_is_replaced_without_becoming_part_of_the_title() {
+        let state = tracking(&["1", "Fix OAuth callback"]);
+        assert_eq!(
+            decide(
+                Some(&state),
+                "⣿ Fix OAuth callback",
+                None,
+                AgentStatus::Working,
+            ),
+            rename(&["1", "Fix OAuth callback"], "◐ Fix OAuth callback")
+        );
+    }
+
+    #[test]
+    fn legacy_working_icon_is_removed_from_pinned_state() {
+        let state = pinned("⣿ auth");
+        assert_eq!(
+            decide(Some(&state), "⣿ auth", None, AgentStatus::Idle),
+            Action::Rename {
+                to: "✓ auth".to_owned(),
+                state: pinned("auth"),
+            }
         );
     }
 
