@@ -30,7 +30,7 @@ pub(crate) enum AgentStatus {
 impl AgentStatus {
     fn icon(self) -> &'static str {
         match self {
-            Self::Working => "⣿",
+            Self::Working => "◐",
             Self::Blocked => "◉",
             Self::Done => "●",
             Self::Idle => "✓",
@@ -160,7 +160,7 @@ fn is_owned_label(current_label: &str, base_label: &str) -> bool {
 }
 
 fn strip_status(label: &str) -> Option<&str> {
-    ["⣿", "◉", "●", "✓", "○"]
+    ["◐", "◉", "●", "✓", "○"]
         .into_iter()
         .find_map(|icon| label.strip_prefix(icon)?.strip_prefix(' '))
 }
@@ -188,7 +188,7 @@ mod tests {
                     Some("Fix OAuth callback"),
                     AgentStatus::Working,
                 ),
-                rename(&[label, "Fix OAuth callback"], "⣿ Fix OAuth callback")
+                rename(&[label, "Fix OAuth callback"], "◐ Fix OAuth callback")
             );
         }
     }
@@ -197,7 +197,7 @@ mod tests {
     fn every_status_has_a_stable_icon() {
         let state = tracking(&["1", "Fix OAuth callback"]);
         for (status, icon) in [
-            (AgentStatus::Working, "⣿"),
+            (AgentStatus::Working, "◐"),
             (AgentStatus::Blocked, "◉"),
             (AgentStatus::Done, "●"),
             (AgentStatus::Idle, "✓"),
@@ -241,7 +241,7 @@ mod tests {
             ),
             rename(
                 &["1", "Fix OAuth callback", "Add regression test"],
-                "⣿ Add regression test"
+                "◐ Add regression test"
             )
         );
     }
@@ -252,7 +252,7 @@ mod tests {
         assert_eq!(
             decide(
                 Some(&state),
-                "⣿ Fix OAuth callback",
+                "◐ Fix OAuth callback",
                 None,
                 AgentStatus::Idle,
             ),
@@ -379,7 +379,7 @@ mod tests {
         let state = tracking(&["1", "● incident"]);
         assert_eq!(
             decide(Some(&state), "✓ ● incident", None, AgentStatus::Working,),
-            rename(&["1", "● incident"], "⣿ ● incident")
+            rename(&["1", "● incident"], "◐ ● incident")
         );
     }
 
@@ -414,7 +414,7 @@ mod tests {
                 Some("Fix OAuth callback"),
                 AgentStatus::Working,
             ),
-            rename(&["1", "Fix OAuth callback"], "⣿ Fix OAuth callback")
+            rename(&["1", "Fix OAuth callback"], "◐ Fix OAuth callback")
         );
     }
 
@@ -428,7 +428,7 @@ mod tests {
                 Some("Fix OAuth callback"),
                 AgentStatus::Working,
             ),
-            rename(&["1", "Fix OAuth callback"], "⣿ Fix OAuth callback")
+            rename(&["1", "Fix OAuth callback"], "◐ Fix OAuth callback")
         );
     }
 

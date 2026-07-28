@@ -7,7 +7,7 @@ Show agent status in managed [Herdr](https://herdr.dev) tabs and synchronize the
 - Numeric tab labels and `opencode` are treated as automatic defaults.
 - An OpenCode lifecycle change reads the pane's latest `terminal_title_stripped` value and updates a single-pane tab.
 - A tab becomes managed after the plugin observes OpenCode in one of its panes.
-- Every managed label is prefixed with Herdr's authoritative tab status: `⣿` working, `◉` blocked, `●` done, `✓` idle, or `○` unknown.
+- Every managed label is prefixed with Herdr's authoritative tab status: `◐` working, `◉` blocked, `●` done, `✓` idle, or `○` unknown.
 - Any label outside the retained automatic defaults and generated titles is treated as manual. Its base text remains pinned while the status icon continues to update.
 - State is isolated by Herdr session socket and survives server restarts.
 - Tabs with multiple panes keep their base label and use Herdr's aggregate agent status because there is no unambiguous title owner.
